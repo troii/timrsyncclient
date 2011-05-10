@@ -4,6 +4,10 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm-3.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="client.properties" />
+	</bean>
+
 	<bean id="messageFactory" class="org.springframework.ws.soap.saaj.SaajSoapMessageFactory" />
 
 	<bean id="webServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
@@ -12,8 +16,8 @@
 			<bean class="org.springframework.ws.transport.http.CommonsHttpMessageSender">
 				<property name="credentials">
 					<bean class="org.apache.commons.httpclient.UsernamePasswordCredentials">
-						<constructor-arg value="troii" />
-						<constructor-arg value="37a55b9cd7234dd7a1ad64ba1b3780d5" />
+						<constructor-arg value="${identifier}" />
+						<constructor-arg value="${apitoken}" />
 					</bean>
 				</property>
 			</bean>
