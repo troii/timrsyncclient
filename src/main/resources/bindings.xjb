@@ -1,0 +1,11 @@
+<jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.0" schemaLocation="types.xsd">
+
+	<jaxb:globalBindings generateElementProperty="false"  />
+
+	<jaxb:schemaBindings>
+
+		<jaxb:package name="com.troii.timr.timrsync"></jaxb:package>
+	</jaxb:schemaBindings>
+
+</jaxb:bindings>
