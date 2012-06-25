@@ -1,5 +1,6 @@
 package com.troii.timr.syncclient.tests;
 
+import com.troii.timr.timrsync.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,10 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.ws.client.core.WebServiceTemplate;
-
-import com.troii.timr.timrsync.GetProjectTimesResponse;
-import com.troii.timr.timrsync.LockProjectTimesRequestType;
-import com.troii.timr.timrsync.ObjectFactory;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/basecontext.xml")
@@ -33,9 +30,20 @@ public class ProjectTimeTests {
 	public void lockProjectTimes() throws Exception {
 		final ObjectFactory objectFactory = new ObjectFactory();
 		final LockProjectTimesRequestType lock = objectFactory.createLockProjectTimesRequestType();
-		lock.getIds().add(34L);
+		lock.getIds().add(1L);
 		final Object response = webServiceTemplate.marshalSendAndReceive(objectFactory
 				.createLockProjectTimesRequest(lock));
+		Assert.assertNotNull(response);
+	}
+
+	@Test
+	public void setProjectTimesStatus() throws Exception {
+		final ObjectFactory objectFactory = new ObjectFactory();
+		final ProjectTimesStatusRequestType statusRequestType = objectFactory.createProjectTimesStatusRequestType();
+		statusRequestType.getIds().add(2L);
+		statusRequestType.setStatus(ProjectTimeStatus.CLEARED);
+		final Object response = webServiceTemplate.marshalSendAndReceive(objectFactory
+				.createSetProjectTimesStatusRequest(statusRequestType));
 		Assert.assertNotNull(response);
 	}
 

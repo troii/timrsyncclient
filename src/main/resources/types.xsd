@@ -416,6 +416,39 @@
 
     <element name="UnlockProjectTimesResponseType" type="boolean"></element>
 
+    <complexType name="ProjectTimesStatusRequestType">
+        <sequence>
+            <element name="ids" type="long" maxOccurs="unbounded" minOccurs="0"></element>
+            <element name="status" type="tns:ProjectTimeStatus" maxOccurs="1" minOccurs="1"></element>
+        </sequence>
+    </complexType>
+
+    <element name="SetProjectTimesStatusRequest" type="tns:ProjectTimesStatusRequestType"></element>
+
+    <element name="SetProjectTimesStatusResponseType" type="boolean"></element>
+
+    <complexType name="WorkTimesStatusRequestType">
+        <sequence>
+            <element name="ids" type="long" maxOccurs="unbounded" minOccurs="0"></element>
+            <element name="status" type="tns:WorkTimeStatus" maxOccurs="1" minOccurs="1"></element>
+        </sequence>
+    </complexType>
+
+    <element name="SetWorkTimesStatusRequest" type="tns:WorkTimesStatusRequestType"></element>
+
+    <element name="SetWorkTimesStatusResponseType" type="boolean"></element>
+
+    <complexType name="DriveLogsStatusRequestType">
+        <sequence>
+            <element name="ids" type="long" maxOccurs="unbounded" minOccurs="0"></element>
+            <element name="status" type="tns:DriveLogStatus" maxOccurs="1" minOccurs="1"></element>
+        </sequence>
+    </complexType>
+
+    <element name="SetDriveLogsStatusRequest" type="tns:DriveLogsStatusRequestType"></element>
+
+    <element name="SetDriveLogsStatusResponseType" type="boolean"></element>
+
     <simpleType name="WorkTimeStatus">
         <restriction base="string">
             <enumeration value="CHANGEABLE"/>
