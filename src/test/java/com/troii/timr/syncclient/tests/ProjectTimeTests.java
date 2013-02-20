@@ -9,6 +9,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
+import javax.xml.bind.JAXBElement;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/basecontext.xml")
 public class ProjectTimeTests {
@@ -31,20 +33,22 @@ public class ProjectTimeTests {
 		final ObjectFactory objectFactory = new ObjectFactory();
 		final LockProjectTimesRequestType lock = objectFactory.createLockProjectTimesRequestType();
 		lock.getIds().add(1L);
-		final Object response = webServiceTemplate.marshalSendAndReceive(objectFactory
+		final JAXBElement<Boolean> response = (JAXBElement<Boolean>) webServiceTemplate.marshalSendAndReceive(objectFactory
 				.createLockProjectTimesRequest(lock));
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getValue());
 	}
 
 	@Test
 	public void setProjectTimesStatus() throws Exception {
 		final ObjectFactory objectFactory = new ObjectFactory();
 		final ProjectTimesStatusRequestType statusRequestType = objectFactory.createProjectTimesStatusRequestType();
-		statusRequestType.getIds().add(2L);
+		statusRequestType.getIds().add(1L);
 		statusRequestType.setStatus(ProjectTimeStatus.CLEARED);
-		final Object response = webServiceTemplate.marshalSendAndReceive(objectFactory
+		final JAXBElement<Boolean> response = (JAXBElement<Boolean>) webServiceTemplate.marshalSendAndReceive(objectFactory
 				.createSetProjectTimesStatusRequest(statusRequestType));
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getValue());
 	}
 
 }
