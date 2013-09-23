@@ -1,477 +1,536 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://timr.com/timrsync"
-        xmlns:tns="http://timr.com/timrsync" elementFormDefault="qualified">
-
-    <complexType name="Task">
-        <sequence>
-            <element name="externalId" type="string" maxOccurs="1"
-                     minOccurs="1">
-            </element>
-            <element name="parentExternalId" type="string" maxOccurs="1"
-                     minOccurs="0">
-            </element>
-            <element name="name" type="string" maxOccurs="1"
-                     minOccurs="1">
-            </element>
-            <element name="description" type="string" maxOccurs="1"
-                     minOccurs="0">
-            </element>
-            <element name="start" type="date" maxOccurs="1"
-                     minOccurs="0">
-                <annotation>
-                    <documentation>
-                        task is available from this day on
-                    </documentation>
-                </annotation>
-            </element>
-            <element name="end" type="date" maxOccurs="1"
-                     minOccurs="0">
-                <annotation>
-                    <documentation>
-                        task is available unitl this day
-                    </documentation>
-                </annotation>
-            </element>
-            <element name="bookable" type="boolean" maxOccurs="1"
-                     minOccurs="1">
-                <annotation>
-                    <documentation>
-                        defines if it is possible to record time on this
-                        task
-                    </documentation>
-                </annotation>
-            </element>
-            <element name="billable" type="boolean" maxOccurs="1"
-                     minOccurs="1">
-            </element>
-            <element name="subtasks" type="tns:Task"
-                     maxOccurs="unbounded" minOccurs="0">
-            </element>
-            <element name="customField1" type="string" maxOccurs="1" minOccurs="0"></element>
-            <element name="customField2" type="string" maxOccurs="1" minOccurs="0"></element>
-            <element name="customField3" type="string" maxOccurs="1" minOccurs="0"></element>
-        </sequence>
-    </complexType>
-
-    <element name="AddTaskRequest" type="tns:Task"></element>
-
-    <element name="AddTaskResponse" type="long"></element>
-
-    <element name="UpdateTaskRequest" type="tns:Task"></element>
-
-    <element name="UpdateTaskResponse" type="boolean"></element>
-
-    <element name="DeleteTaskRequest" type="string"></element>
-
-    <element name="DeleteTaskResponse" type="boolean"></element>
-
-    <complexType name="User">
-        <sequence>
-            <element name="externalId" type="string" maxOccurs="1" minOccurs="1"></element>
-            <element name="login" type="string" maxOccurs="1" minOccurs="1"></element>
-            <element name="firstname" type="string" maxOccurs="1" minOccurs="0"></element>
-            <element name="lastname" type="string" maxOccurs="1" minOccurs="0"></element>
-            <element name="email" type="string" maxOccurs="1" minOccurs="1"></element>
-            <element name="isAdmin" type="boolean" maxOccurs="1" minOccurs="1"></element>
-            <element name="leaved" type="date" maxOccurs="1" minOccurs="0">
-                <annotation>
-                    <documentation>date when user leaved company, after this date this user is not allowed to log
-                        in anymore</documentation>
-                </annotation>
-            </element>
-            <element name="workingHours" type="decimal" maxOccurs="1" minOccurs="0">
-                <annotation>
-                    <documentation>number of working hours per week</documentation>
-                </annotation>
-            </element>
-            <element name="isTeamLeader" type="boolean" maxOccurs="1" minOccurs="0" default="false"></element>
-        </sequence>
-    </complexType>
-
-    <element name="AddUserRequest" type="tns:User"></element>
-
-    <element name="AddUserResponse" type="long"></element>
-
-    <element name="UpdateUserRequest" type="tns:User"></element>
-
-    <element name="UpdateUserResponse" type="boolean"></element>
-
-    <element name="DeleteUserRequest" type="string"></element>
-
-    <element name="DeleteUserResponse" type="boolean"></element>
-
-    <element name="AssignTaskToUserRequest">
-        <complexType>
-            <sequence>
-                <element name="externalUserId" type="string" maxOccurs="1" minOccurs="0"></element>
-                <element name="externalTaskId" type="string" maxOccurs="1" minOccurs="0"></element>
-            </sequence>
-        </complexType>
-    </element>
-
-    <element name="AssignTaskToUserResponse" type="boolean"></element>
-
-    <element name="RemoveTaskFromUserRequest">
-        <complexType>
-            <sequence>
-                <element name="externalUserId" type="string" maxOccurs="1" minOccurs="0"></element>
-                <element name="externalTaskId" type="string" maxOccurs="1" minOccurs="0"></element>
-            </sequence>
-        </complexType>
-    </element>
-
-    <element name="RemoveTaskFromUserResponse" type="boolean"></element>
-
-    <complexType name="WorkTime">
-        <complexContent>
-            <extension base="tns:Record">
-                <sequence>
-                    <element name="externalWorkItemId" type="string" maxOccurs="1" minOccurs="1"></element>
-                    <element name="description" type="string" maxOccurs="1" minOccurs="0"></element>
-                </sequence>
-            </extension>
-        </complexContent>
-    </complexType>
-
-    <complexType name="ProjectTime">
-        <complexContent>
-            <extension base="tns:Record">
-                <sequence>
-                    <element name="externalTaskId" type="string" maxOccurs="1" minOccurs="1"></element>
-                    <element name="description" type="string" maxOccurs="1" minOccurs="0"></element>
-                    <element name="billable" type="boolean" maxOccurs="1" minOccurs="1"></element>
-                </sequence>
-            </extension>
-        </complexContent>
-    </complexType>
-
-    <complexType name="DriveLog">
-        <complexContent>
-            <extension base="tns:Record">
-                <sequence>
-                    <element name="externalCarId" type="string" maxOccurs="1" minOccurs="1"></element>
-                    <element name="startMileage" type="long" maxOccurs="1" minOccurs="1"></element>
-                    <element name="endMileage" type="long" maxOccurs="1" minOccurs="1"></element>
-                    <element name="route" type="string" maxOccurs="1" minOccurs="0"></element>
-                    <element name="purpose" type="string" maxOccurs="1" minOccurs="0"></element>
-                    <element name="visited" type="string" maxOccurs="1" minOccurs="0"></element>
-                </sequence>
-            </extension>
-        </complexContent>
-    </complexType>
-
-    <complexType name="Record">
-        <sequence>
-            <element name="id" type="long" maxOccurs="1" minOccurs="1"></element>
-            <element name="externalUserId" type="string" maxOccurs="1" minOccurs="1"></element>
-            <element name="startTime" type="dateTime" maxOccurs="1" minOccurs="1"></element>
-            <element name="startTimeZone" type="string" maxOccurs="1" minOccurs="1"></element>
-            <element name="endTime" type="dateTime" maxOccurs="1" minOccurs="1"></element>
-            <element name="endTimeZone" type="string" maxOccurs="1" minOccurs="1"></element>
-            <element name="duration" type="long" maxOccurs="1" minOccurs="1"></element>
-            <element name="startPosition" type="tns:Position" maxOccurs="1" minOccurs="0"></element>
-            <element name="endPosition" type="tns:Position" maxOccurs="1" minOccurs="0"></element>
-            <element name="closed" type="boolean" maxOccurs="1" minOccurs="1"></element>
-            <element name="changed" type="boolean" maxOccurs="1" minOccurs="1"></element>
-            <element name="lastModifiedTime" type="dateTime" maxOccurs="1" minOccurs="1"></element>
-            <element name="lastModifiedTimeZone" type="string" maxOccurs="1" minOccurs="1"></element>
-            <element name="breakTime" type="int" maxOccurs="1" minOccurs="1"></element>
-        </sequence>
-    </complexType>
-
-    <complexType name="RecordQuery">
-        <sequence>
-            <element name="externalUserId" type="string" maxOccurs="1"
-                     minOccurs="0">
-            </element>
-            <element name="start" type="dateTime" maxOccurs="1"
-                     minOccurs="0">
-            </element>
-            <element name="end" type="dateTime" maxOccurs="1"
-                     minOccurs="0">
-            </element>
-            <element name="lastModified" type="dateTime" maxOccurs="1" minOccurs="0"></element>
-            <element name="closed" type="boolean" maxOccurs="1"
-                     minOccurs="0">
-            </element>
-        </sequence>
-    </complexType>
-
-    <complexType name="WorkTimeQuery">
-        <complexContent>
-            <extension base="tns:RecordQuery">
-                <sequence>
-                    <element name="externalWorkItemId" type="string"
-                             maxOccurs="1" minOccurs="0">
-                    </element>
-                    <element name="description" type="string"
-                             maxOccurs="1" minOccurs="0">
-                    </element>
-                    <element name="statuses" type="tns:WorkTimeStatus" maxOccurs="unbounded" minOccurs="0"></element>
-                </sequence>
-            </extension>
-        </complexContent>
-    </complexType>
-
-    <complexType name="ProjectTimeQuery">
-        <complexContent>
-            <extension base="tns:RecordQuery">
-                <sequence>
-                    <element name="externalTaskId" type="string"
-                             maxOccurs="1" minOccurs="0">
-                    </element>
-                    <element name="description" type="string"
-                             maxOccurs="1" minOccurs="0">
-                    </element>
-                    <element name="billable" type="boolean"
-                             maxOccurs="1" minOccurs="0">
-                    </element>
-                    <element name="statuses" type="tns:ProjectTimeStatus" maxOccurs="unbounded" minOccurs="0"></element>
-                </sequence>
-            </extension>
-        </complexContent>
-    </complexType>
-
-    <complexType name="DriveLogQuery">
-        <complexContent>
-            <extension base="tns:RecordQuery">
-                <sequence>
-                    <element name="externalCarId" type="string"
-                             maxOccurs="1" minOccurs="0">
-                    </element>
-                    <element name="route" type="string" maxOccurs="1"
-                             minOccurs="0">
-                    </element>
-                    <element name="purpose" type="string" maxOccurs="1"
-                             minOccurs="0">
-                    </element>
-                    <element name="visited" type="string" maxOccurs="1"
-                             minOccurs="0">
-                    </element>
-                    <element name="business" type="boolean"
-                             maxOccurs="1" minOccurs="0">
-                    </element>
-                    <element name="statuses" type="tns:DriveLogStatus"
-                             maxOccurs="unbounded" minOccurs="0">
-                    </element>
-                </sequence>
-            </extension>
-        </complexContent>
-    </complexType>
-
-    <element name="GetWorkTimesRequest" type="tns:WorkTimeQuery" />
-
-    <element name="GetWorkTimesResponse">
-        <complexType>
-            <sequence>
-                <element name="workTimes" type="tns:WorkTime" maxOccurs="unbounded" minOccurs="0"></element>
-            </sequence>
-        </complexType>
-    </element>
-
-    <element name="GetProjectTimesRequest" type="tns:ProjectTimeQuery" />
-
-    <element name="GetProjectTimesResponse">
-        <complexType>
-            <sequence>
-                <element name="projectTimes" type="tns:ProjectTime" maxOccurs="unbounded" minOccurs="0"></element>
-            </sequence>
-        </complexType>
-    </element>
-
-    <element name="GetDriveLogsRequest" type="tns:DriveLogQuery" />
-
-    <element name="GetDriveLogsResponse">
-        <complexType>
-            <sequence>
-                <element name="driveLogs" type="tns:DriveLog" maxOccurs="unbounded" minOccurs="0"></element>
-            </sequence>
-        </complexType>
-    </element>
-
-
-    <complexType name="Position">
-        <sequence>
-            <element name="id" type="long" maxOccurs="1" minOccurs="1"></element>
-            <element name="latitude" type="double" maxOccurs="1" minOccurs="1"></element>
-            <element name="longitude" type="double" maxOccurs="1" minOccurs="1"></element>
-        </sequence>
-    </complexType>
-
-    <element name="GetTasksRequest" />
-
-    <element name="GetTasksResponse">
-        <complexType>
-            <sequence>
-                <element name="tasks" type="tns:Task" maxOccurs="unbounded" minOccurs="0"></element>
-            </sequence>
-        </complexType>
-    </element>
-
-    <element name="GetUsersRequest" />
-
-    <element name="GetUsersResponse">
-        <complexType>
-            <sequence>
-                <element name="users" type="tns:User" maxOccurs="unbounded" minOccurs="0"></element>
-            </sequence>
-        </complexType>
-    </element>
-
-
-    <complexType name="WorkItem">
-        <sequence>
-            <element name="externalId" type="string" maxOccurs="1" minOccurs="1"></element>
-            <element name="name" type="string" maxOccurs="1" minOccurs="1"></element>
-            <element name="description" type="string" maxOccurs="1" minOccurs="0"></element>
-        </sequence>
-    </complexType>
-
-
-    <element name="AddWorkItemRequest" type="tns:WorkItem"></element>
-
-    <element name="AddWorkItemResponse" type="long"></element>
-
-    <element name="UpdateWorkItemRequest" type="tns:WorkItem"></element>
-
-    <element name="UpdateWorkItemResponse" type="boolean"></element>
-
-    <element name="DeleteWorkItemRequest" type="string"></element>
-
-    <element name="DeleteWorkItemResponse" type="boolean"></element>
-
-    <element name="GetWorkItemsRequest" />
-
-    <element name="GetWorkItemsResponse">
-        <complexType>
-            <sequence>
-                <element name="workItem" type="tns:WorkItem" maxOccurs="unbounded" minOccurs="0"></element>
-            </sequence>
-        </complexType>
-    </element>
-
-    <complexType name="Car">
-        <sequence>
-            <element name="externalId" type="string" maxOccurs="1" minOccurs="1"></element>
-            <element name="name" type="string" maxOccurs="1" minOccurs="1"></element>
-            <element name="plate" type="string" maxOccurs="1" minOccurs="1"></element>
-        </sequence>
-    </complexType>
-
-    <element name="AddCarRequest" type="tns:Car"></element>
-
-    <element name="AddCarResponse" type="long"></element>
-
-    <element name="UpdateCarRequest" type="tns:Car"></element>
-
-    <element name="UpdateCarResponse" type="boolean"></element>
-
-    <element name="DeleteCarRequest" type="string"></element>
-
-    <element name="DeleteCarResponse" type="boolean"></element>
-
-    <element name="GetCarsRequest" />
-
-    <element name="GetCarsResponse">
-        <complexType>
-            <sequence>
-                <element name="cars" type="tns:Car" maxOccurs="unbounded" minOccurs="0"></element>
-            </sequence>
-        </complexType>
-    </element>
-
-    <element name="AssignCarToUserRequest">
-        <complexType>
-            <sequence>
-                <element name="externalUserId" type="string" maxOccurs="1" minOccurs="0"></element>
-                <element name="externalCarId" type="string" maxOccurs="1" minOccurs="0"></element>
-            </sequence>
-        </complexType>
-    </element>
-
-    <element name="AssignCarToUserResponse" type="boolean"></element>
-
-    <element name="RemoveCarFromUserRequest">
-        <complexType>
-            <sequence>
-                <element name="externalUserId" type="string" maxOccurs="1" minOccurs="0"></element>
-                <element name="externalCarId" type="string" maxOccurs="1" minOccurs="0"></element>
-            </sequence>
-        </complexType>
-    </element>
-
-    <element name="RemoveCarFromUserResponse" type="boolean"></element>
-
-    <element name="LockProjectTimesRequest" type="tns:LockProjectTimesRequestType"></element>
-
-    <element name="LockProjectTimesResponseType" type="boolean"></element>
-
-    <complexType name="LockProjectTimesRequestType">
-        <sequence>
-            <element name="ids" type="long" maxOccurs="unbounded" minOccurs="0"></element>
-        </sequence>
-    </complexType>
-
-    <element name="UnlockProjectTimesRequest" type="tns:LockProjectTimesRequestType"></element>
-
-    <element name="UnlockProjectTimesResponseType" type="boolean"></element>
-
-    <complexType name="ProjectTimesStatusRequestType">
-        <sequence>
-            <element name="ids" type="long" maxOccurs="unbounded" minOccurs="0"></element>
-            <element name="status" type="tns:ProjectTimeStatus" maxOccurs="1" minOccurs="1"></element>
-        </sequence>
-    </complexType>
-
-    <element name="SetProjectTimesStatusRequest" type="tns:ProjectTimesStatusRequestType"></element>
-
-    <element name="SetProjectTimesStatusResponseType" type="boolean"></element>
-
-    <complexType name="WorkTimesStatusRequestType">
-        <sequence>
-            <element name="ids" type="long" maxOccurs="unbounded" minOccurs="0"></element>
-            <element name="status" type="tns:WorkTimeStatus" maxOccurs="1" minOccurs="1"></element>
-        </sequence>
-    </complexType>
-
-    <element name="SetWorkTimesStatusRequest" type="tns:WorkTimesStatusRequestType"></element>
-
-    <element name="SetWorkTimesStatusResponseType" type="boolean"></element>
-
-    <complexType name="DriveLogsStatusRequestType">
-        <sequence>
-            <element name="ids" type="long" maxOccurs="unbounded" minOccurs="0"></element>
-            <element name="status" type="tns:DriveLogStatus" maxOccurs="1" minOccurs="1"></element>
-        </sequence>
-    </complexType>
-
-    <element name="SetDriveLogsStatusRequest" type="tns:DriveLogsStatusRequestType"></element>
-
-    <element name="SetDriveLogsStatusResponseType" type="boolean"></element>
-
-    <simpleType name="WorkTimeStatus">
-        <restriction base="string">
-            <enumeration value="CHANGEABLE"/>
-            <enumeration value="LOCKED"/>
-            <enumeration value="CLOSED"/>
-        </restriction>
-    </simpleType>
-
-    <simpleType name="ProjectTimeStatus">
-        <restriction base="string">
-            <enumeration value="CHANGEABLE"/>
-            <enumeration value="LOCKED"/>
-            <enumeration value="CLEARED"/>
-            <enumeration value="CLOSED"/>
-        </restriction>
-    </simpleType>
-
-    <simpleType name="DriveLogStatus">
-        <restriction base="string">
-            <enumeration value="CHANGEABLE"/>
-            <enumeration value="LOCKED"/>
-            <enumeration value="CLEARED"/>
-            <enumeration value="CLOSED"/>
-        </restriction>
-    </simpleType>
+		xmlns:tns="http://timr.com/timrsync" elementFormDefault="qualified">
+
+	<complexType name="Task">
+		<sequence>
+			<element name="externalId" type="string" maxOccurs="1"
+					 minOccurs="1">
+			</element>
+			<element name="parentExternalId" type="string" maxOccurs="1"
+					 minOccurs="0">
+			</element>
+			<element name="name" type="string" maxOccurs="1"
+					 minOccurs="1">
+			</element>
+			<element name="description" type="string" maxOccurs="1"
+					 minOccurs="0">
+			</element>
+			<element name="start" type="date" maxOccurs="1"
+					 minOccurs="0">
+				<annotation>
+					<documentation>
+						task is available from this day on
+					</documentation>
+				</annotation>
+			</element>
+			<element name="end" type="date" maxOccurs="1"
+					 minOccurs="0">
+				<annotation>
+					<documentation>
+						task is available until this day
+					</documentation>
+				</annotation>
+			</element>
+			<element name="bookable" type="boolean" maxOccurs="1"
+					 minOccurs="1">
+				<annotation>
+					<documentation>
+						defines if it is possible to record time on this
+						task
+					</documentation>
+				</annotation>
+			</element>
+			<element name="billable" type="boolean" maxOccurs="1"
+					 minOccurs="1">
+			</element>
+			<element name="subtasks" type="tns:Task"
+					 maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="customField1" type="string" maxOccurs="1" minOccurs="0"/>
+			<element name="customField2" type="string" maxOccurs="1" minOccurs="0"/>
+			<element name="customField3" type="string" maxOccurs="1" minOccurs="0"/>
+		</sequence>
+	</complexType>
+
+	<element name="AddTaskRequest" type="tns:Task"/>
+
+	<element name="AddTaskResponse" type="long"/>
+
+	<element name="UpdateTaskRequest" type="tns:Task"/>
+
+	<element name="UpdateTaskResponse" type="boolean"/>
+
+	<element name="UpdateTaskIdRequest">
+		<complexType>
+			<sequence>
+				<element name="task" type="tns:Task" maxOccurs="1" minOccurs="1"/>
+				<element name="newExternalTaskId" type="string" maxOccurs="1" minOccurs="1"/>
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="UpdateTaskIdResponse" type="boolean"/>
+
+	<element name="DeleteTaskRequest" type="string"/>
+
+	<element name="DeleteTaskResponse" type="boolean"/>
+
+	<complexType name="User">
+		<sequence>
+			<element name="externalId" type="string" maxOccurs="1" minOccurs="1"/>
+			<element name="login" type="string" maxOccurs="1" minOccurs="1"/>
+			<element name="firstname" type="string" maxOccurs="1" minOccurs="0"/>
+			<element name="lastname" type="string" maxOccurs="1" minOccurs="0"/>
+			<element name="email" type="string" maxOccurs="1" minOccurs="1"/>
+			<element name="isAdmin" type="boolean" maxOccurs="1" minOccurs="1"/>
+			<element name="leaved" type="date" maxOccurs="1" minOccurs="0">
+				<annotation>
+					<documentation>date when user leaved company, after this date this user is not allowed to log
+						in anymore
+					</documentation>
+				</annotation>
+			</element>
+			<element name="workingHours" type="decimal" maxOccurs="1" minOccurs="0">
+				<annotation>
+					<documentation>number of working hours per week</documentation>
+				</annotation>
+			</element>
+			<element name="isTeamLeader" type="boolean" maxOccurs="1" minOccurs="0" default="false"/>
+		</sequence>
+	</complexType>
+
+	<element name="AddUserRequest" type="tns:User"/>
+
+	<element name="AddUserResponse" type="long"/>
+
+	<element name="UpdateUserRequest" type="tns:User"/>
+
+	<element name="UpdateUserResponse" type="boolean"/>
+
+	<element name="UpdateUserIdRequest">
+		<complexType>
+			<sequence>
+				<element name="user" type="tns:User" maxOccurs="1" minOccurs="1"/>
+				<element name="newExternalUserId" type="string" maxOccurs="1" minOccurs="1"/>
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="UpdateUserIdResponse" type="boolean"/>
+
+	<element name="DeleteUserRequest" type="string"/>
+
+	<element name="DeleteUserResponse" type="boolean"/>
+
+	<element name="AssignTaskToUserRequest">
+		<complexType>
+			<sequence>
+				<element name="externalUserId" type="string" maxOccurs="1" minOccurs="0"/>
+				<element name="externalTaskId" type="string" maxOccurs="1" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="AssignTaskToUserResponse" type="boolean"/>
+
+	<element name="RemoveTaskFromUserRequest">
+		<complexType>
+			<sequence>
+				<element name="externalUserId" type="string" maxOccurs="1" minOccurs="0"/>
+				<element name="externalTaskId" type="string" maxOccurs="1" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="RemoveTaskFromUserResponse" type="boolean"/>
+
+	<complexType name="WorkTime">
+		<complexContent>
+			<extension base="tns:Record">
+				<sequence>
+					<element name="externalWorkItemId" type="string" maxOccurs="1" minOccurs="1"/>
+					<element name="description" type="string" maxOccurs="1" minOccurs="0"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ProjectTime">
+		<complexContent>
+			<extension base="tns:Record">
+				<sequence>
+					<element name="externalTaskId" type="string" maxOccurs="1" minOccurs="1"/>
+					<element name="taskBreadCrumbs" type="string" maxOccurs="1" minOccurs="1"/>
+					<element name="description" type="string" maxOccurs="1" minOccurs="0"/>
+					<element name="billable" type="boolean" maxOccurs="1" minOccurs="1"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="DriveLog">
+		<complexContent>
+			<extension base="tns:Record">
+				<sequence>
+					<element name="externalCarId" type="string" maxOccurs="1" minOccurs="1"/>
+					<element name="startMileage" type="long" maxOccurs="1" minOccurs="1"/>
+					<element name="endMileage" type="long" maxOccurs="1" minOccurs="1"/>
+					<element name="route" type="string" maxOccurs="1" minOccurs="0"/>
+					<element name="purpose" type="string" maxOccurs="1" minOccurs="0"/>
+					<element name="visited" type="string" maxOccurs="1" minOccurs="0"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="Record">
+		<sequence>
+			<element name="id" type="long" maxOccurs="1" minOccurs="1"/>
+			<element name="externalUserId" type="string" maxOccurs="1" minOccurs="1"/>
+			<element name="startTime" type="dateTime" maxOccurs="1" minOccurs="1"/>
+			<element name="startTimeZone" type="string" maxOccurs="1" minOccurs="1"/>
+			<element name="endTime" type="dateTime" maxOccurs="1" minOccurs="1"/>
+			<element name="endTimeZone" type="string" maxOccurs="1" minOccurs="1"/>
+			<element name="duration" type="long" maxOccurs="1" minOccurs="1"/>
+			<element name="startPosition" type="tns:Position" maxOccurs="1" minOccurs="0"/>
+			<element name="endPosition" type="tns:Position" maxOccurs="1" minOccurs="0"/>
+			<element name="closed" type="boolean" maxOccurs="1" minOccurs="1"/>
+			<element name="changed" type="boolean" maxOccurs="1" minOccurs="1"/>
+			<element name="lastModifiedTime" type="dateTime" maxOccurs="1" minOccurs="1"/>
+			<element name="lastModifiedTimeZone" type="string" maxOccurs="1" minOccurs="1"/>
+			<element name="breakTime" type="int" maxOccurs="1" minOccurs="1"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="RecordQuery">
+		<sequence>
+			<element name="externalUserId" type="string" maxOccurs="1"
+					 minOccurs="0">
+			</element>
+			<element name="start" type="dateTime" maxOccurs="1"
+					 minOccurs="0">
+			</element>
+			<element name="end" type="dateTime" maxOccurs="1"
+					 minOccurs="0">
+			</element>
+			<element name="lastModified" type="dateTime" maxOccurs="1" minOccurs="0"/>
+			<element name="closed" type="boolean" maxOccurs="1"
+					 minOccurs="0">
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="WorkTimeQuery">
+		<complexContent>
+			<extension base="tns:RecordQuery">
+				<sequence>
+					<element name="externalWorkItemId" type="string"
+							 maxOccurs="1" minOccurs="0">
+					</element>
+					<element name="description" type="string"
+							 maxOccurs="1" minOccurs="0">
+					</element>
+					<element name="statuses" type="tns:WorkTimeStatus" maxOccurs="unbounded" minOccurs="0"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ProjectTimeQuery">
+		<complexContent>
+			<extension base="tns:RecordQuery">
+				<sequence>
+					<element name="externalTaskId" type="string"
+							 maxOccurs="1" minOccurs="0">
+					</element>
+					<element name="description" type="string"
+							 maxOccurs="1" minOccurs="0">
+					</element>
+					<element name="billable" type="boolean"
+							 maxOccurs="1" minOccurs="0">
+					</element>
+					<element name="statuses" type="tns:ProjectTimeStatus" maxOccurs="unbounded" minOccurs="0"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="DriveLogQuery">
+		<complexContent>
+			<extension base="tns:RecordQuery">
+				<sequence>
+					<element name="externalCarId" type="string"
+							 maxOccurs="1" minOccurs="0">
+					</element>
+					<element name="route" type="string" maxOccurs="1"
+							 minOccurs="0">
+					</element>
+					<element name="purpose" type="string" maxOccurs="1"
+							 minOccurs="0">
+					</element>
+					<element name="visited" type="string" maxOccurs="1"
+							 minOccurs="0">
+					</element>
+					<element name="business" type="boolean"
+							 maxOccurs="1" minOccurs="0">
+					</element>
+					<element name="statuses" type="tns:DriveLogStatus"
+							 maxOccurs="unbounded" minOccurs="0">
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<element name="GetWorkTimesRequest" type="tns:WorkTimeQuery"/>
+
+	<element name="GetWorkTimesResponse">
+		<complexType>
+			<sequence>
+				<element name="workTimes" type="tns:WorkTime" maxOccurs="unbounded" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="GetProjectTimesRequest" type="tns:ProjectTimeQuery"/>
+
+	<element name="GetProjectTimesResponse">
+		<complexType>
+			<sequence>
+				<element name="projectTimes" type="tns:ProjectTime" maxOccurs="unbounded" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="GetDriveLogsRequest" type="tns:DriveLogQuery"/>
+
+	<element name="GetDriveLogsResponse">
+		<complexType>
+			<sequence>
+				<element name="driveLogs" type="tns:DriveLog" maxOccurs="unbounded" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+
+
+	<complexType name="Position">
+		<sequence>
+			<element name="id" type="long" maxOccurs="1" minOccurs="1"/>
+			<element name="latitude" type="double" maxOccurs="1" minOccurs="1"/>
+			<element name="longitude" type="double" maxOccurs="1" minOccurs="1"/>
+		</sequence>
+	</complexType>
+
+	<element name="GetTasksRequest"/>
+
+	<element name="GetTasksResponse">
+		<complexType>
+			<sequence>
+				<element name="tasks" type="tns:Task" maxOccurs="unbounded" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="GetUsersRequest"/>
+
+	<element name="GetUsersResponse">
+		<complexType>
+			<sequence>
+				<element name="users" type="tns:User" maxOccurs="unbounded" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+
+
+	<complexType name="WorkItem">
+		<sequence>
+			<element name="externalId" type="string" maxOccurs="1" minOccurs="1"/>
+			<element name="name" type="string" maxOccurs="1" minOccurs="1"/>
+			<element name="description" type="string" maxOccurs="1" minOccurs="0"/>
+		</sequence>
+	</complexType>
+
+
+	<element name="AddWorkItemRequest" type="tns:WorkItem"/>
+
+	<element name="AddWorkItemResponse" type="long"/>
+
+	<element name="UpdateWorkItemRequest" type="tns:WorkItem"/>
+
+	<element name="UpdateWorkItemResponse" type="boolean"/>
+
+	<element name="UpdateWorkItemIdRequest">
+		<complexType>
+			<sequence>
+				<element name="workItem" type="tns:WorkItem" maxOccurs="1" minOccurs="1"/>
+				<element name="newExternalWorkItemId" type="string" maxOccurs="1" minOccurs="1"/>
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="UpdateWorkItemIdResponse" type="boolean"/>
+
+	<element name="DeleteWorkItemRequest" type="string"/>
+
+	<element name="DeleteWorkItemResponse" type="boolean"/>
+
+	<element name="GetWorkItemsRequest"/>
+
+	<element name="GetWorkItemsResponse">
+		<complexType>
+			<sequence>
+				<element name="workItem" type="tns:WorkItem" maxOccurs="unbounded" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+
+	<complexType name="Car">
+		<sequence>
+			<element name="externalId" type="string" maxOccurs="1" minOccurs="1"/>
+			<element name="name" type="string" maxOccurs="1" minOccurs="1"/>
+			<element name="plate" type="string" maxOccurs="1" minOccurs="1"/>
+		</sequence>
+	</complexType>
+
+	<element name="AddCarRequest" type="tns:Car"/>
+
+	<element name="AddCarResponse" type="long"/>
+
+	<element name="UpdateCarRequest" type="tns:Car"/>
+
+	<element name="UpdateCarResponse" type="boolean"/>
+
+	<element name="UpdateCarIdRequest">
+		<complexType>
+			<sequence>
+				<element name="car" type="tns:Car" maxOccurs="1" minOccurs="1"/>
+				<element name="newExternalCarId" type="string" maxOccurs="1" minOccurs="1"/>
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="UpdateCarIdResponse" type="boolean"/>
+
+	<element name="DeleteCarRequest" type="string"/>
+
+	<element name="DeleteCarResponse" type="boolean"/>
+
+	<element name="GetCarsRequest"/>
+
+	<element name="GetCarsResponse">
+		<complexType>
+			<sequence>
+				<element name="cars" type="tns:Car" maxOccurs="unbounded" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="AssignCarToUserRequest">
+		<complexType>
+			<sequence>
+				<element name="externalUserId" type="string" maxOccurs="1" minOccurs="0"/>
+				<element name="externalCarId" type="string" maxOccurs="1" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="AssignCarToUserResponse" type="boolean"/>
+
+	<element name="RemoveCarFromUserRequest">
+		<complexType>
+			<sequence>
+				<element name="externalUserId" type="string" maxOccurs="1" minOccurs="0"/>
+				<element name="externalCarId" type="string" maxOccurs="1" minOccurs="0"/>
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="RemoveCarFromUserResponse" type="boolean"/>
+
+	<element name="LockProjectTimesRequest" type="tns:LockProjectTimesRequestType"/>
+
+	<element name="LockProjectTimesResponseType" type="boolean"/>
+
+	<complexType name="LockProjectTimesRequestType">
+		<sequence>
+			<element name="ids" type="long" maxOccurs="unbounded" minOccurs="0"/>
+		</sequence>
+	</complexType>
+
+	<element name="UnlockProjectTimesRequest" type="tns:LockProjectTimesRequestType"/>
+
+	<element name="UnlockProjectTimesResponseType" type="boolean"/>
+
+	<complexType name="ProjectTimesStatusRequestType">
+		<sequence>
+			<element name="ids" type="long" maxOccurs="unbounded" minOccurs="0"/>
+			<element name="status" type="tns:ProjectTimeStatus" maxOccurs="1" minOccurs="1"/>
+		</sequence>
+	</complexType>
+
+	<element name="SetProjectTimesStatusRequest" type="tns:ProjectTimesStatusRequestType"/>
+
+	<element name="SetProjectTimesStatusResponseType" type="boolean"/>
+
+	<complexType name="WorkTimesStatusRequestType">
+		<sequence>
+			<element name="ids" type="long" maxOccurs="unbounded" minOccurs="0"/>
+			<element name="status" type="tns:WorkTimeStatus" maxOccurs="1" minOccurs="1"/>
+		</sequence>
+	</complexType>
+
+	<element name="SetWorkTimesStatusRequest" type="tns:WorkTimesStatusRequestType"/>
+
+	<element name="SetWorkTimesStatusResponseType" type="boolean"/>
+
+	<complexType name="DriveLogsStatusRequestType">
+		<sequence>
+			<element name="ids" type="long" maxOccurs="unbounded" minOccurs="0"/>
+			<element name="status" type="tns:DriveLogStatus" maxOccurs="1" minOccurs="1"/>
+		</sequence>
+	</complexType>
+
+	<element name="SetDriveLogsStatusRequest" type="tns:DriveLogsStatusRequestType"/>
+
+	<element name="SetDriveLogsStatusResponseType" type="boolean"/>
+
+	<simpleType name="WorkTimeStatus">
+		<restriction base="string">
+			<enumeration value="CHANGEABLE"/>
+			<enumeration value="LOCKED"/>
+			<enumeration value="CLOSED"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="ProjectTimeStatus">
+		<restriction base="string">
+			<enumeration value="CHANGEABLE"/>
+			<enumeration value="LOCKED"/>
+			<enumeration value="CLEARED"/>
+			<enumeration value="CLOSED"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="DriveLogStatus">
+		<restriction base="string">
+			<enumeration value="CHANGEABLE"/>
+			<enumeration value="LOCKED"/>
+			<enumeration value="CLEARED"/>
+			<enumeration value="CLOSED"/>
+		</restriction>
+	</simpleType>
+
+	<element name="SaveWorkTimeRequest" type="tns:WorkTime"/>
+
+	<element name="SaveWorkTimeResponse" type="long"/>
+
+	<element name="SaveProjectTimeRequest" type="tns:ProjectTime"/>
+
+	<element name="SaveProjectTimeResponse" type="long"/>
+
+	<element name="SaveDriveLogRequest" type="tns:DriveLog"/>
+
+	<element name="SaveDriveLogResponse" type="long"/>
+
 </schema>

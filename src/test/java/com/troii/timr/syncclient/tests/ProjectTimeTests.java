@@ -10,6 +10,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
 import javax.xml.bind.JAXBElement;
+import javax.xml.datatype.DatatypeFactory;
+import java.util.GregorianCalendar;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/basecontext.xml")
@@ -43,12 +45,26 @@ public class ProjectTimeTests {
 	public void setProjectTimesStatus() throws Exception {
 		final ObjectFactory objectFactory = new ObjectFactory();
 		final ProjectTimesStatusRequestType statusRequestType = objectFactory.createProjectTimesStatusRequestType();
-		statusRequestType.getIds().add(1L);
+		statusRequestType.getIds().add(1346682L);
 		statusRequestType.setStatus(ProjectTimeStatus.CLEARED);
 		final JAXBElement<Boolean> response = (JAXBElement<Boolean>) webServiceTemplate.marshalSendAndReceive(objectFactory
 				.createSetProjectTimesStatusRequest(statusRequestType));
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getValue());
+	}
+
+	@Test
+	public void addProjectTime() throws Exception {
+		final ObjectFactory objectFactory = new ObjectFactory();
+		final ProjectTime projectTime = new ProjectTime();
+		projectTime.setExternalUserId("WB");
+		projectTime.setExternalTaskId("T1");
+		projectTime.setStartTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar()));
+		projectTime.setEndTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar()));
+		projectTime.setDescription("timrsyncclient");
+		final JAXBElement<Long> response = (JAXBElement<Long>) webServiceTemplate.marshalSendAndReceive(objectFactory.createSaveProjectTimeRequest(projectTime));
+		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getValue() > 0L);
 	}
 
 }
