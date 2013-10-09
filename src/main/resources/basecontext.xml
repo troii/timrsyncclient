@@ -22,7 +22,7 @@
 				</property>
 			</bean>
 		</property>
-		<property name="defaultUri" value="http://timrsync.timr.com/timrsync/timrsync" />
+		<property name="defaultUri" value="https://timrtest.timr.com/timr/timrsync" />
 		<property name="marshaller" ref="marshaller" />
 		<property name="unmarshaller" ref="marshaller" />
 	</bean>
